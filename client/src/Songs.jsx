@@ -6,7 +6,7 @@ const Songs = ({room}) =>{
     const [defaultSongs, setDefaultSongs] = useState([]);
     const [songs,setSongs] = useState([]);
     const [selectedSong,setSelectedSong] = useState(null);
-
+    const [isPlaying,setIsPlaying] = useState(false);
     const isTimeoutError = (error)=>{
         return (
             error.code === 'ECONNABORTED'||
@@ -58,26 +58,32 @@ const Songs = ({room}) =>{
     const sync=(songUrl)=>{
         console.log("Syncing song: " + songUrl);
         try {
+            if(isPlaying){
+                setIsPlaying(false);
+                audioRef.current.pause();
+                
+                console.log("Paused song: "+songUrl);
+            }
+            if(audioRef.current.src === songUrl && isPlaying){
+                 setIsPlaying(false);
+                audioRef.current.pause();
+                console.log("Paused song: "+songUrl);
+                return;
+            }
+                setIsPlaying(true);
+                audioRef.current.src=songUrl;
+                audioRef.current.currentTime=0;
+                audioRef.current.play();
+                socket.emit('sync_music',{room,songUrl});
+                console.log("Syncing song: " + songUrl);
+                console.log("audio current src: "+ audioRef.current.src);
             
-            audioRef.current.src=songUrl;
-            audioRef.current.currentTime=0;
-            audioRef.current.play();
-            socket.emit('sync_music',{room,songUrl});
-            console.log("Syncing song: " + songUrl);
         }catch(error){
             console.error("Error syncing song: ", error);
         }
     }
 
-    const pause = ()=>{
-        if(audioRef.current){
-            audioRef.current.pause();
-            console.log("Paused song");
-        }
-        else{
-            console.log("No song is currently playing");
-        }
-    }
+    
     useEffect(()=>{
         const handlePlaySync = (song)=>{
             console.log("Now playing: " + song);
@@ -148,15 +154,13 @@ const Songs = ({room}) =>{
                 {defaultSongs.map((song,index)=>(
                     <li key={index}>
                         {song.public_id.split('/').pop()}
-                        <button onClick={()=>sync(song.url)}>Play</button>
-                        <button onClick={pause}>Pause</button>
+                        <button onClick={()=>sync(song.url)}>Play/Pause</button>
                     </li>
                 ))}
                 {songs.map((song,index)=>(
                     <li key={index}>
                         {song.public_id.split('/').pop()}
-                        <button onClick={()=>sync(song.url)}>Play</button>
-                        <button onClick={pause}>Pause</button>
+                        <button onClick={()=>sync(song.url)}>Play/Pause</button>
                     </li>
                 ))}
             </ul>

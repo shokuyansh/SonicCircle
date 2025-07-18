@@ -24,6 +24,8 @@ io.on('connection', (socket) => {
     const randomName = funnyNames[Math.floor(Math.random()*funnyNames.length)];
     socket_to_name[socket.id] = randomName;
     console.log("User Connected : " + socket.id);
+    console.log("User name: "+randomName);
+    socket.emit('random_name',randomName);
     socket.on('join_room', (data) => {
         socket.join(data.room);
         console.log("User Joined Room : " + data.room);

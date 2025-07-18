@@ -5,7 +5,19 @@ import Songs from './Songs';
 import RoomMember from './roomMember';
 function App() {
   const [room, setRoom] = useState("")
-
+  const [randomName, setRandomName] = useState("");
+  const [showModal,setShowModal] = useState(false);
+  useEffect(()=>{
+    const handleRandomName = (name)=>{
+      setRandomName(name);
+      console.log("Random name received: " + name);
+    }
+    console.log("random_name hit");
+    socket.on('random_name',handleRandomName);
+    return ()=>{
+      socket.off('random_name',handleRandomName); 
+    }
+  },[socket]);
   const createRoom = () =>{
     console.log("Creating a new room");
     const newRoomId = Math.random().toString(36).substring(2,12);
@@ -39,6 +51,7 @@ function App() {
           onChange={(e) => setRoom(e.target.value)}
         />
         <button onClick={joinRoom}>🔗 Join Room</button>
+        <p>{randomName? `You will be joining as: ${randomName}`: `Generating you name...`}</p>
       </div>
 
       {room && (

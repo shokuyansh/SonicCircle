@@ -63,6 +63,7 @@ const Songs = ({room}) =>{
                 audioRef.current.pause();
                 
                 console.log("Paused song: "+songUrl);
+                
             }
             if(audioRef.current.src === songUrl && isPlaying){
                  setIsPlaying(false);

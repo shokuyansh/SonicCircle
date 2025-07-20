@@ -26,19 +26,44 @@ io.on('connection', (socket) => {
     console.log("User Connected : " + socket.id);
     console.log("User name: "+randomName);
     socket.emit('random_name',randomName);
-    socket.on('join_room', (data) => {
+    socket.on('create_room',(data)=>{
         socket.join(data.room);
         console.log("User Joined Room : " + data.room);
         sendRoomMembers(data.room);
         socket_to_room[socket.id]=data.room;
+    })
+    socket.on('join_room', (data,callback) => {
+        const validRoom=checkValidRoom(data.room);
+        console.log("valid room : "+validRoom);
+        if(validRoom===true){
+            console.log("Joining room")
+            socket.join(data.room);
+            console.log("User Joined Room : " + data.room);
+            sendRoomMembers(data.room);
+            socket_to_room[socket.id]=data.room;
+            if(typeof callback==='function'){
+                callback({success:true});
+            }
+            
+        }
+        else{
+            if(typeof callback==='function'){
+            callback({success:false,error:"Room does not exist"});}
+        }
     });
     socket.on('sync_music', (data) =>{
     console.log("Syncing song: " + data.songUrl + " in room: " + data.room);
     socket.to(data.room).emit('playing_song',data.songUrl);
     })
     socket.on('room_state',(data)=>{
+        const validRoom=checkValidRoom(data.room);
+        console.log("valid room : "+validRoom);
+        if(validRoom===true){
         console.log("Requesting room state for room: " + data.room);
         socket.to(data.room).emit('request_room_state',socket.id);
+        }else{
+            socket.emit("join_room_error",{error:"Room does not exist"})
+        }
     })
     socket.on('respond_room_state',(data)=>{
         console.log("Setting up new joinee: " + data.to + " in room: " + data.room);
@@ -68,6 +93,12 @@ io.on('connection', (socket) => {
         }
     })
 });
+
+function checkValidRoom(room){
+    const socketsInRoom = io.sockets.adapter.rooms.get(room);
+    if(!socketsInRoom)  {return false;}
+    return true;
+}
 
 function sendRoomMembers(room) {
     console.log("Sending room members for room: " + room);

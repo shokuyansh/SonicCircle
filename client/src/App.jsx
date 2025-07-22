@@ -70,7 +70,7 @@ function App() {
     formData.append("song", selectedSong)
     formData.append("room", room)
     try {
-      const response = await axios.post("http://localhost:3001/api/upload", formData)
+      const response = await axios.post("https://musicmirrorbackend.onrender.com/api/upload", formData)
       console.log("Song uploaded :", response)
       setSongUploaded(true);
     } catch (error) {

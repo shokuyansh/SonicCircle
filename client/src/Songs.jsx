@@ -17,10 +17,10 @@ const Songs = ({ room, onSongUploaded }) => {
   const fetchSongs = async () => {
     try {
       if (room) {
-        const response = await axios.get(`http://localhost:3001/api/songs?room=${room}`)
+        const response = await axios.get(`https://musicmirrorbackend.onrender.com/api/songs?room=${room}`)
         console.log("Fetched songs: ", response.data)
         setSongs(response.data.data)
-        const defaultSongsResponse = await axios.get("http://localhost:3001/api/defaultsongs")
+        const defaultSongsResponse = await axios.get("https://musicmirrorbackend.onrender.com/api/defaultsongs")
         console.log("Fetched default songs: ", defaultSongsResponse.data)
         setDefaultSongs(defaultSongsResponse.data.data)
       }

@@ -40,20 +40,16 @@ io.on('connection', (socket) => {
             socket.join(data.room);
             console.log("User Joined Room : " + data.room);
             sendRoomMembers(data.room);
-            socket_to_room[socket.id]=data.room;
-            if(typeof callback==='function'){
-                callback({success:true});
-            }
-            
+            socket_to_room[socket.id]=data.room;    
+            callback({success:true}); 
         }
         else{
-            if(typeof callback==='function'){
-            callback({success:false,error:"Room does not exist"});}
+            callback({success:false,error:"Room does not exist"});
         }
     });
     socket.on('sync_music', (data) =>{
-    console.log("Syncing song: " + data.songUrl + " in room: " + data.room);
-    socket.to(data.room).emit('playing_song',data.songUrl);
+        console.log("Syncing song: " + data.songUrl + " in room: " + data.room);
+        socket.to(data.room).emit('playing_song',data.songUrl);
     })
     socket.on('room_state',(data)=>{
         const validRoom=checkValidRoom(data.room);
@@ -61,8 +57,6 @@ io.on('connection', (socket) => {
         if(validRoom===true){
         console.log("Requesting room state for room: " + data.room);
         socket.to(data.room).emit('request_room_state',socket.id);
-        }else{
-            socket.emit("join_room_error",{error:"Room does not exist"})
         }
     })
     socket.on('respond_room_state',(data)=>{
@@ -104,7 +98,7 @@ function sendRoomMembers(room) {
     console.log("Sending room members for room: " + room);
     const socketsInRoom = io.sockets.adapter.rooms.get(room);
     if(!socketsInRoom)  {return;}
-    const memberNames = Array.from(socketsInRoom).map(socketID => socket_to_name[socketID])
+    const memberNames = Array.from(socketsInRoom).map(socketID => socket_to_name[socketID]);
     console.log("Room members for room " + room + ": " + memberNames.join(', '));
     io.to(room).emit('res_room_members', memberNames);
 }

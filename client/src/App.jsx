@@ -5,7 +5,7 @@ import { socket } from "./Socket"
 import Songs from "./Songs"
 import "./App.css"
 import RoomInput from "./RoomInput"
-import RoomMember from "./RoomMember"
+import RoomMember from "./roomMember"
 import { toast, ToastContainer } from "react-toastify"
 import axios from "axios"
 

@@ -66,7 +66,7 @@ const Songs = ({ room, onSongUploaded }) => {
       socket.emit("sync_music", { 
         room, 
         songUrl,
-        songCurrentTime:audioRef.current.currentTime,
+        songCurrentTime:0,
         isPlaying:!audioRef.current.paused,
         timestamp:Date.now()
        });

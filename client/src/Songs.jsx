@@ -78,9 +78,8 @@ const Songs = ({ room, onSongUploaded }) => {
   }
 
   useEffect(() => {
-    const handlePlaySync =async(data) => {
+    const handlePlaySync =(data) => {
       console.log("Now playing: " + data.songUrl)
-      await waitForAudioToLoad(audioRef.current)
       audioRef.current.src = data.songUrl
       const delay=(Date.now()-timestamp)/1000;
       audioRef.current.currentTime = data.songCurrentTime+delay;

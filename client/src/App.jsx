@@ -8,13 +8,15 @@ import RoomInput from "./RoomInput"
 import RoomMember from "./roomMember"
 import { toast, ToastContainer } from "react-toastify"
 import axios from "axios"
-
+import { FaCopy,FaCheck } from "react-icons/fa"
 function App() {
   const [room, setRoom] = useState("")
   const [randomName, setRandomName] = useState("")
   const [showModal, setShowModal] = useState(true)
   const [selectedSong, setSelectedSong] = useState(null)
   const [songUploaded,setSongUploaded]=useState(false);
+  const [isLoading,setLoading]=useState(false);
+  const [isCopied,setisCopied]=useState(false);
   useEffect(() => {
     const handleRandomName = (name) => {
       setRandomName(name)
@@ -70,9 +72,14 @@ function App() {
     formData.append("song", selectedSong)
     formData.append("room", room)
     try {
+      setLoading(true);
       const response = await axios.post("https://musicmirrorbackend.onrender.com/api/upload", formData)
+      if(response){
+        setLoading(false);
+      }
       console.log("Song uploaded :", response)
       setSongUploaded(true);
+      toast("Song Uploaded,Refresh if changes not reflected")
     } catch (error) {
       console.error("Error uploading song: ", error)
       toast("Error Uploading Songs")
@@ -93,6 +100,7 @@ function App() {
       localStorage.setItem("name", randomName)
       console.log("Creating a new room : ", newRoomId)
       socket.emit("create_room", { room: newRoomId })
+      toast("Room Created")
     } catch (error) {
       console.error("Error creating room: ", error)
       toast("Error creating Room")
@@ -109,6 +117,7 @@ function App() {
             localStorage.setItem("room", room)
             localStorage.setItem("name", randomName)
             setShowModal(false)
+            toast("Room Joined")
           } else {
             toast(response.error)
             setRoom("")
@@ -122,6 +131,18 @@ function App() {
       console.error("Error joining room: ", error)
       toast.error("Error Joining Room")
     }
+  }
+  const handleCopy=async()=>{
+      try{
+        await navigator.clipboard.writeText(room);
+        setisCopied(true);
+        setTimeout(()=>{
+          setisCopied(false);
+        },2000)
+      }catch(error){{
+          console.error("Failed to copy : "+error);
+          toast("Failed to copy , retry");
+      }}
   }
 
   return (
@@ -222,7 +243,13 @@ function App() {
                   <div className="supported-formats">
                     <span>Supported: MP3, WAV, OGG</span>
                   </div>
-                  <button className="upload-btn" onClick={uploadSong} disabled={!selectedSong}>
+                  <button className="upload-btn" onClick={uploadSong} disabled={!selectedSong||isLoading}>
+                    {isLoading?(
+                      <div style={{display:"flex",alignItems:"center"}}>
+                        <div className="spinner"/>
+                        Uploading...
+                      </div>):(<>
+                      
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path
                         d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15"
@@ -247,17 +274,22 @@ function App() {
                       />
                     </svg>
                     Upload Song
+                    </>)}
                   </button>
                 </div>
               </div>
             </div>
             <div className="room-info-card">
-              <div className="room-info-header">
-                <h3>
-                  🆔 Current Room: <code>{room}</code>
-                </h3>
-                <p>Share this ID with friends to sync up!</p>
-              </div>
+              <div className="room-id-label">Room</div>
+              <div className="room-id-row">
+                <span className="room-id-tag">{room}</span>
+                <button className="copy-btn" onClick={handleCopy}>
+                        {isCopied?<FaCheck/>:<FaCopy/>}
+                        <span className="copy-text">
+                        {isCopied?"Copied":"Copy"}</span>
+                </button>
+                </div>
+                <p className="share-text">Share this ID with friends to sync up!</p>
             </div>
           </div>
           <div className="center-column">
@@ -268,7 +300,7 @@ function App() {
           </div>
         </div>
       )}
-      <ToastContainer theme="dark" />
+      <ToastContainer/>
     </div>
   )
 }

@@ -4,6 +4,7 @@ const RoomMember =({room})=>{
     const [roomMembers, setRoomMembers] = useState([]);
     
     useEffect(()=>{
+            console.log("Room member jsx hit!");
             socket.on('res_room_members',(data)=>{
             console.log(`Room members response received for room ${room}: ` + data);
             setRoomMembers(data);
@@ -13,7 +14,7 @@ const RoomMember =({room})=>{
             socket.off('res_room_members');
             };
             
-        },[]);
+        },[room]);
 
        
     
@@ -67,7 +68,6 @@ const RoomMember =({room})=>{
             </div>
             <div className="member-info">
               <h4>{member}</h4>
-              <p>{index === 0 ? "Room Host" : "Member"}</p>
             </div>
             <div className="member-status online"></div>
           </div>

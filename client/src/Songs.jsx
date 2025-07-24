@@ -1,15 +1,19 @@
-"use client"
 import { socket } from "./Socket"
 import { useEffect, useRef, useState } from "react"
 import axios from "axios"
 import "./Songs.css"
+import { FaPlay } from "react-icons/fa";
+
 
 const Songs = ({ room, onSongUploaded }) => {
   const audioRef = useRef(null)
   const [defaultSongs, setDefaultSongs] = useState([])
   const [songs, setSongs] = useState([])
   const [isPlaying, setIsPlaying] = useState(false)
-
+  const [hoveredIndex,setHoveredIndex]=useState("")
+  const [currentTime,setCurrentTime]=useState(null);
+  const [isHoveringSeek,setHoveringSeek]=useState(false); 
+  const allsongs=[...defaultSongs,...songs];
   const isTimeoutError = (error) => {
     return error.code === "ECONNABORTED" || error.message.includes("timeout") || error.message.includes("Network Error")
   }
@@ -59,8 +63,8 @@ const Songs = ({ room, onSongUploaded }) => {
       setIsPlaying(true)
       audioRef.current.src = songUrl
       audioRef.current.currentTime = 0
-      audioRef.current.play()
       socket.emit("sync_music", { room, songUrl })
+      audioRef.current.play()
       console.log("Syncing song: " + songUrl)
     } catch (error) {
       console.error("Error syncing song: ", error)
@@ -73,6 +77,7 @@ const Songs = ({ room, onSongUploaded }) => {
       audioRef.current.src = song
       audioRef.current.currentTime = 0
       audioRef.current.play()
+      setIsPlaying(true);
     }
 
     const handleRequestRoomState = (requesterId) => {
@@ -131,6 +136,75 @@ const Songs = ({ room, onSongUploaded }) => {
     }
   }, [room, socket])
 
+  const songmap=new Map();
+  allsongs.map((song,index)=>(
+    songmap.set(song.url,index)
+  ))
+  const handlePrev=()=>{
+    try{
+      setIsPlaying(false);
+      const currentSong=audioRef.current.src;
+      const currentIndex=songmap.get(currentSong);
+      const newIndex=(currentIndex-1+allsongs.length)%allsongs.length;
+      const newSong=allsongs[newIndex]
+      if(!newSong){
+        console.warn("no prev songs")
+      }
+      console.log("New song : "+newSong.url);
+      audioRef.current.src=newSong.url;
+      sync(newSong.url);
+    }catch(error){
+        toast(error);
+    }
+  }
+  const togglePlayPause = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause()
+        setIsPlaying(false)
+      } else {
+        audioRef.current.play()
+        setIsPlaying(true)
+      }
+    }
+  }
+  const handleNext=()=>{
+      try{
+      setIsPlaying(false);
+      const currentSong=audioRef.current.src;
+      const currentIndex=songmap.get(currentSong);
+      const newIndex=(currentIndex+1+allsongs.length)%allsongs.length;
+      const newSong=allsongs[newIndex];
+      if(!newSong){
+        console.warn("no new songs")
+      }
+      console.log("New song : "+newSong.url);
+      audioRef.current.src=newSong.url;
+      sync(newSong.url);
+    }catch(error){
+        toast(error);
+    }
+  }
+  
+const formatTime = (secs) => {
+  const minutes = Math.floor(secs / 60);
+  const seconds = Math.floor(secs % 60).toString().padStart(2, "0");
+  return `${minutes}:${seconds}`;
+};
+
+const handleSeek=(e)=>{
+  const seek=parseFloat(e.target.value);
+  audioRef.current.currentTime=seek;
+}
+useEffect(() => {
+  const interval = setInterval(() => {
+    if (audioRef.current) {
+      setCurrentTime(audioRef.current.currentTime);
+    }
+  }, 100);
+  return () => clearInterval(interval);
+}, []);
+
   return (
     <>
       <div className="songs-container">
@@ -150,70 +224,67 @@ const Songs = ({ room, onSongUploaded }) => {
               </svg>
               Playlist
             </h2>
-            <span className="song-count">{defaultSongs.length + songs.length} songs</span>
+            <span className="song-count">{allsongs.length} songs</span>
           </div>
           <div className="songs-list">
-            {defaultSongs.map((song, index) => (
-              <div key={`default-${index}`} className="song-item">
-                <div className="song-info">
-                  <div className="song-artwork">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path
-                        d="M9 18V5L21 3V16"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <circle cx="6" cy="18" r="3" stroke="currentColor" strokeWidth="2" />
-                      <circle cx="18" cy="16" r="3" stroke="currentColor" strokeWidth="2" />
-                    </svg>
-                  </div>
-                  <div className="song-details">
-                    <h4>{song.public_id.split("/").pop()}</h4>
-                  </div>
-                </div>
-                <button className="play-btn" onClick={() => sync(song.url)} title="Play/Pause">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <polygon points="5,3 19,12 5,21" fill="currentColor" />
-                  </svg>
-                </button>
+            {allsongs.map((song, index) => (
+              <div  
+                key={`song-${index}`} 
+                className={`song-item ${audioRef.current.src === song.url ? "active" : ""}`}
+                onClick={()=>sync(song.url)}
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}>
+              <div className="song-index">
+                {audioRef.current.src === song.url && isPlaying ? (
+                <span className="bars">
+                <span></span><span></span><span></span>
+                </span>
+                ) : hoveredIndex === index ? (
+                <FaPlay />
+                ) : (
+                index + 1
+                )}
               </div>
-            ))}
-            {songs.map((song, index) => (
-              <div key={`uploaded-${index}`} className="song-item">
-                <div className="song-info">
-                  <div className="song-artwork">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path
-                        d="M9 18V5L21 3V16"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <circle cx="6" cy="18" r="3" stroke="currentColor" strokeWidth="2" />
-                      <circle cx="18" cy="16" r="3" stroke="currentColor" strokeWidth="2" />
-                    </svg>
-                  </div>
-                  <div className="song-details">
-                    <h4>{song.public_id.split("/").pop()}</h4>
-                  </div>
-                </div>
-                <button
-                  className="play-btn"
-                  onClick={() => sync(song.url)}
-                  title="Play/Pause"
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <polygon points="5,3 19,12 5,21" fill="currentColor" />
-                  </svg>
-                </button>
-              </div>
+              <div className="song-title">{song.public_id.split("/").pop()}</div>
+              
+            </div>
+
             ))}
           </div>
         </div>
       </div>
+      <div className="playbar">
+          <div className="button-group">
+          <button onClick={handlePrev} title="Previous">
+              ⏮
+          </button>
+          <button className="play-button" onClick={togglePlayPause} title="Play/Pause">
+              {isPlaying ? "⏸" : "▶"}
+          </button>
+          <button onClick={handleNext} title="Next">
+               ⏭
+          </button>
+          </div>
+          <div className="seek-bar-wrapper">
+          <input
+              type="range"
+              min="0"
+              max={audioRef.current?.duration || 0}
+              value={currentTime}
+              onChange={handleSeek}  
+              onMouseEnter={()=>setHoveringSeek(true)}
+              onMouseLeave={()=>setHoveringSeek(false)}
+              className={`seek-bar ${isHoveringSeek?`hovered`:''}`}
+              style={{
+                background: `linear-gradient(to right, #37aa5f ${Math.floor((currentTime / (audioRef.current?.duration || 1)) * 100)}%, #555 ${Math.floor((currentTime / (audioRef.current?.duration || 1)) * 100)}%)`
+  }}/>
+          
+          <div className="time-display">
+              {formatTime(audioRef.current?.currentTime || 0)} / {formatTime(audioRef.current?.duration || 0)}
+          </div>
+          </div>
+      </div>
+
       <audio ref={audioRef}></audio>
     </>
   )

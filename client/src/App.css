@@ -277,39 +277,77 @@ body {
   box-shadow: none;
 }
 
-/* Room Info Card (moved below upload) */
 .room-info-card {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-}
-
-.room-info-header {
+  background: linear-gradient(145deg, #1f1f2b, #252537);
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  color: white;
   text-align: center;
+  position: relative;
+  max-width: 400px;
+  margin: 0 auto;
 }
 
-.room-info-header h3 {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 8px;
-  color: #ffffff;
-}
-
-.room-info-header code {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 4px 8px;
+.room-id-label {
+  position: absolute;
+  top: -10px;
+  left: 20px;
+  background: #7b5be0;
+  color: white;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.75rem;
   border-radius: 6px;
-  font-family: "Monaco", "Menlo", monospace;
-  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.room-info-header p {
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.7);
-  margin: 0;
+.room-id-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.room-id-tag {
+  background: #2c2c3e;
+  padding: 0.4rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  font-family: monospace;
+  font-size: 1rem;
+  color: #c9c9ff;
+}
+
+.copy-btn {
+  background: #1c1c2a;
+  border: none;
+  color: white;
+  padding: 0.5rem 0.8rem;
+  border-radius: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.copy-btn:hover {
+  background: #33334d;
+  transform: scale(1.05);
+}
+
+.copy-text {
+  font-size: 0.9rem;
+}
+
+.share-text {
+  font-size: 0.85rem;
+  margin-top: 0.6rem;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 /* Responsive Design */
@@ -336,5 +374,20 @@ body {
 
   .right-column {
     order: 3;
+  }
+}
+.spinner {
+  border: 3px solid transparent;
+  border-top: 3px solid white;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  animation: spin 0.8s linear infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }

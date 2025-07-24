@@ -8,7 +8,8 @@ import RoomInput from "./RoomInput"
 import RoomMember from "./roomMember"
 import { toast, ToastContainer } from "react-toastify"
 import axios from "axios"
-import { FaCopy,FaCheck } from "react-icons/fa"
+import { FaCopy,FaCheck,FaGithub } from "react-icons/fa"
+import {CiMail,CiLinkedin} from "react-icons/ci"
 function App() {
   const [room, setRoom] = useState("")
   const [randomName, setRandomName] = useState("")
@@ -290,6 +291,19 @@ function App() {
                 </button>
                 </div>
                 <p className="share-text">Share this ID with friends to sync up!</p>
+            </div>
+            <div className="room-info-card">
+              <div className="note-text">
+            <p>Note : If not working in sync , try to refresh </p>
+            <p></p>
+            <p>ps : May have some issues with mobile</p>
+            <p>For any issues mail me ;)</p><br></br>
+            </div>
+            <div className="social-links">
+              <a href="https://github.com/shokuyansh/SonicCircle"><FaGithub size={24}></FaGithub></a>
+              <a href="mailto:anshmalgotra@gmail.com"><CiMail size={24}></CiMail></a>
+              <a href="https://www.linkedin.com/in/ansh-malgotra-7b39b1274/"><CiLinkedin size={24}></CiLinkedin></a>
+            </div>
             </div>
           </div>
           <div className="center-column">

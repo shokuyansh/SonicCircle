@@ -126,6 +126,10 @@ const Songs = ({ room, onSongUploaded }) => {
           const delay = (Date.now() - lastUpdatedTime) / 1000
           audioRef.current.currentTime = currentTime + delay
           audioRef.current.play()
+          setIsPlaying(true);
+        }
+        else{
+          setIsPlaying(false);
         }
       } catch (err) {
         console.error("Error setting up new joiner state: ", err)

@@ -349,6 +349,22 @@ body {
   margin-top: 0.6rem;
   color: rgba(255, 255, 255, 0.6);
 }
+.note-text{
+  font-size: 0.85rem;
+  margin-top: 0.6rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: left;
+}
+.social-links a {
+  color: #444;
+  transition: color 0.3s;
+  padding-right: 15px ;
+}
+
+.social-links a:hover {
+  color: #0077ff;
+}
+
 
 /* Responsive Design */
 @media (max-width: 1200px) {

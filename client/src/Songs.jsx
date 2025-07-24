@@ -63,7 +63,13 @@ const Songs = ({ room, onSongUploaded }) => {
       setIsPlaying(true)
       audioRef.current.src = songUrl
       audioRef.current.currentTime = 0
-      socket.emit("sync_music", { room, songUrl })
+      socket.emit("sync_music", { 
+        room, 
+        songUrl,
+        songCurrentTime:audioRef.current.currentTime,
+        isPlaying:!audioRef.current.paused,
+        timestamp:Date.now()
+       });
       audioRef.current.play()
       console.log("Syncing song: " + songUrl)
     } catch (error) {
@@ -72,10 +78,12 @@ const Songs = ({ room, onSongUploaded }) => {
   }
 
   useEffect(() => {
-    const handlePlaySync = (song) => {
-      console.log("Now playing: " + song)
-      audioRef.current.src = song
-      audioRef.current.currentTime = 0
+    const handlePlaySync =async(data) => {
+      console.log("Now playing: " + data.songUrl)
+      await waitForAudioToLoad(audioRef.current)
+      audioRef.current.src = data.songUrl
+      const delay=(Date.now()-timestamp)/1000;
+      audioRef.current.currentTime = data.songCurrentTime+delay;
       audioRef.current.play()
       setIsPlaying(true);
     }

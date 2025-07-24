@@ -49,7 +49,7 @@ io.on('connection', (socket) => {
     });
     socket.on('sync_music', (data) =>{
         console.log("Syncing song: " + data.songUrl + " in room: " + data.room);
-        socket.to(data.room).emit('playing_song',data.songUrl);
+        socket.to(data.room).emit('playing_song',data);
     })
     socket.on('room_state',(data)=>{
         const validRoom=checkValidRoom(data.room);

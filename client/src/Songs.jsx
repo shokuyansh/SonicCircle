@@ -81,9 +81,9 @@ const Songs = ({ room, onSongUploaded }) => {
     const handlePlaySync =(data) => {
       console.log("Now playing: " + data.songUrl)
       audioRef.current.src = data.songUrl
-      const delay=(Date.now()-timestamp)/1000;
+      const delay=(Date.now()-data.timestamp)/1000;
       audioRef.current.currentTime = data.songCurrentTime+delay;
-      audioRef.current.play()
+      audioRef.current.play();
       setIsPlaying(true);
     }
 

@@ -2,7 +2,7 @@ import { socket } from "./Socket"
 import { useEffect, useRef, useState } from "react"
 import axios from "axios"
 import "./Songs.css"
-import { FaPlay } from "react-icons/fa";
+import { FaPlay,FaMusic } from "react-icons/fa";
 
 
 const Songs = ({ room, onSongUploaded }) => {
@@ -81,7 +81,7 @@ const Songs = ({ room, onSongUploaded }) => {
     const handlePlaySync =(data) => {
       console.log("Now playing: " + data.songUrl)
       audioRef.current.src = data.songUrl
-      const delay=(Date.now()-data.timestamp)/1000;
+      const delay=(Date.now()-data.timestamp)/1000; 
       audioRef.current.currentTime = data.songCurrentTime+delay;
       audioRef.current.play();
       setIsPlaying(true);
@@ -222,17 +222,7 @@ useEffect(() => {
         <div className="songs-section">
           <div className="section-header">
             <h2>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M9 18V5L21 3V16"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <circle cx="6" cy="18" r="3" stroke="currentColor" strokeWidth="2" />
-                <circle cx="18" cy="16" r="3" stroke="currentColor" strokeWidth="2" />
-              </svg>
+              <FaMusic ></FaMusic>
               Playlist
             </h2>
             <span className="song-count">{allsongs.length} songs</span>

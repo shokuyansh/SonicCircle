@@ -151,11 +151,11 @@ function App() {
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-box">
-            <h2>Welcome to Music Sync App 🎶</h2>
+            <h2>Welcome to Music Mirror</h2>
             <p>{randomName ? `You're joining as: ${randomName}` : "Generating your name..."}</p>
             <div style={{ marginTop: "1rem" }}>
               <button onClick={createRoom} className="modal-button">
-                🎵 Create Room
+                 Create Room
               </button>
               <div style={{ margin: "1rem 0" }}>
                 <RoomInput
@@ -164,7 +164,7 @@ function App() {
                   }}
                 ></RoomInput>
                 <button onClick={joinRoom} className="modal-button">
-                  🎵 Join Room
+                   Join Room
                 </button>
               </div>
             </div>

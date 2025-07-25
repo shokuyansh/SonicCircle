@@ -13,7 +13,7 @@ body {
 #root {
   width: 100vw;
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+  background: linear-gradient(135deg, #000000 0%, #000000df 50%, #00000098 100%);
   color: #ffffff;
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
@@ -60,49 +60,37 @@ body {
 }
 
 .modal-box h2 {
+  font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-weight: lighter;
   margin-bottom: 16px;
   color: #ffffff;
 }
 
 .modal-box p {
+  font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-weight: lighter;
   margin-bottom: 20px;
   color: rgba(255, 255, 255, 0.8);
 }
 
-/* Input field */
-.modal-input {
-  padding: 0.5rem;
-  width: 80%;
-  margin-top: 0.5rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  color: #ffffff;
-}
 
-.modal-input:focus {
-  outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
-}
-
-/* Buttons */
 .modal-button {
   padding: 12px 24px;
   margin: 8px;
-  cursor: pointer;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  cursor: pointer; 
+  background: linear-gradient(135deg, #3f2812 0%, #b67334 100%);
+  color: rgb(0, 0, 0);
   border: none;
   border-radius: 12px;
-  font-weight: 600;
+  font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-weight: lighter;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  /* box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); */
 }
 
 .modal-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 6px 20px rgba(43, 44, 48, 0.4);
 }
 
 .pin-input-container {
@@ -129,7 +117,7 @@ body {
   box-shadow: 0 0 5px rgba(102, 126, 234, 0.5);
 }
 
-/* New Layout Structure */
+
 .main-layout {
   display: grid;
   grid-template-columns: 320px 1fr 300px;
@@ -156,7 +144,7 @@ body {
   flex-direction: column;
 }
 
-/* Upload Section Styles */
+
 .upload-section-wrapper {
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px);
@@ -185,7 +173,7 @@ body {
 .upload-icon {
   width: 48px;
   height: 48px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #141b32 0%, #000000 100%);
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -196,7 +184,8 @@ body {
 
 .upload-header h3 {
   font-size: 20px;
-  font-weight: 600;
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-weight: lighter;
   margin-bottom: 8px;
   color: #ffffff;
 }
@@ -254,7 +243,7 @@ body {
   justify-content: center;
   gap: 8px;
   padding: 14px 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #000000 0%, #2b2929ba 100%);
   border: none;
   border-radius: 12px;
   color: white;
@@ -262,12 +251,12 @@ body {
   font-size: 14px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 15px rgba(84, 86, 95, 0.3);
 }
 
 .upload-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 6px 20px rgba(167, 176, 216, 0.4);
 }
 
 .upload-btn:disabled {
@@ -278,7 +267,7 @@ body {
 }
 
 .room-info-card {
-  background: linear-gradient(145deg, #1f1f2b, #252537);
+  background: linear-gradient(145deg, #191717, #17151590);
   padding: 1.5rem;
   border-radius: 1rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
@@ -293,8 +282,8 @@ body {
   position: absolute;
   top: -10px;
   left: 20px;
-  background: #7b5be0;
-  color: white;
+  background: #d0d5ce;
+  color: rgb(2, 0, 0);
   padding: 0.2rem 0.5rem;
   font-size: 0.75rem;
   border-radius: 6px;
@@ -312,11 +301,11 @@ body {
 }
 
 .room-id-tag {
-  background: #2c2c3e;
+  background: #272736;
   padding: 0.4rem 1rem;
   border-radius: 0.5rem;
-  font-weight: bold;
-  font-family: monospace;
+  font-weight:bold;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 1rem;
   color: #c9c9ff;
 }
@@ -336,7 +325,7 @@ body {
 }
 
 .copy-btn:hover {
-  background: #33334d;
+  background: #303040;
   transform: scale(1.05);
 }
 
@@ -350,6 +339,7 @@ body {
   color: rgba(255, 255, 255, 0.6);
 }
 .note-text{
+  font-family: cursive;
   font-size: 0.85rem;
   margin-top: 0.6rem;
   color: rgba(255, 255, 255, 0.6);

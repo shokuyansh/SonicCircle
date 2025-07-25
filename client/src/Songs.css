@@ -34,7 +34,9 @@
     align-items: center;
     gap: 12px;
     font-size: 22px;
-    font-weight: 600;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+
+    font-weight:lighter;
     color: #ffffff;
   }
 
@@ -50,6 +52,8 @@
   .songs-list {
     display: flex;
     flex-direction: column;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: lighter;
     gap: 8px;
     flex: 1;
     overflow-y: auto;
@@ -75,6 +79,8 @@
   }
   .song-item {
     display: flex;
+    background: #1a1a1a85;
+    border-radius: 40px;
     align-items: center;
     cursor: pointer;
     transition: background 0.2s;
@@ -82,7 +88,7 @@
   }
 
   .song-item:hover {
-    background: #181818;
+    background: #2c2c2c;
   }
 
   .song-index {
@@ -116,7 +122,7 @@
     }
   }
 
-  .play-btn {
+  .play-button {
     width: 36px;
     height: 36px;
     background: linear-gradient(135deg, #677ad1 0%, #764ba2 100%);
@@ -176,7 +182,7 @@
   .member-avatar {
     width: 40px;
     height: 40px;
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: linear-gradient(135deg, #191970 0%, #782a33 100%);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -190,8 +196,9 @@
   }
 
   .member-info h4 {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-size: 15px;
-    font-weight: 500;
+    font-weight:lighter;
     color: #ffffff;
     margin-bottom: 4px;
   }
